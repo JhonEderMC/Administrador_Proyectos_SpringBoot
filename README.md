@@ -9,6 +9,8 @@
 - Importar como proyecto Maven
 - Base de datos: Archivo llamado database-proyecto-... .sql 
 - En la base de datos ya se encuentran unos usuarios y datos predefinidos.
+- Configurar  base de datos en .properties (src/...) 
+- Tener encuenta que por defecto esta configurado para MariaDB (pom.xml y properties). Tener encuenta esto para MySQL superior a 8.
 - Ejecutar apache tomcat embebido.
 - link: localhost:8080
 - Solo los usuarios activos estan autorizados para entrar.
