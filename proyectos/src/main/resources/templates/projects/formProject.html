@@ -1,0 +1,156 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>ProyectosApp | Creación de Proyectos</title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/bootstrap/css/jumbotron.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/sticky-footer-navbar.css}" rel="stylesheet">
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" >
+  </head>
+
+  <body>
+
+    <header th:insert="fragments/menu.html :: menu-principal">      
+    </header >
+    
+    <main role="main">     
+      <hr>
+      <div class="container"> 
+
+        <div class="card">
+          <h4 class="card-header"><strong>Datos del proyecto</strong></h4>   
+                  
+          <div class="card-body">
+            <form th:action="@{/projects/save}" method="post" th:object="${project}"  >
+
+			<div th:if="${#fields.hasErrors('*')}" class='alert alert-danger'
+				role='alert'>
+				Por favor corrija los siguientes errores:
+				<ul>
+					<li th:each="err : ${#fields.errors('*')}" th:text="${err}" />
+				</ul>
+			</div>
+			<input type="hidden" th:field="*{id}"> <!--for save the id when going to do update  -->
+			<div class="row">
+                <div class="col-md-5"> 
+                  <div class="form-group">
+                    <label for="name">nombre</label>
+                    <input type="text" class="form-control" th:field="*{name}" id="name" name="name" placeholder="Nombre del proyecto" required="required">
+                  </div>
+                </div>
+                <div class="col-md-4"> 
+                  <div class="form-group">
+                    <label for="area">Area</label>
+                    <input type="text" class="form-control" th:field="*{area}" id="area" name="area" placeholder="Area del proyecto" required="required">
+                  </div> 
+                </div>   
+                <div class="col-md-3"> 
+                  <div class="form-group">
+                    <label for="budget">Presupuesto</label>
+                    <input type="text" class="form-control" th:field="*{budget}" id="budget" name="budget" placeholder="Presupuesto $" required="required">
+                  </div> 
+                </div>  
+                 <div class="col-md-5"> 
+                  <div class="form-group">
+                    <label for="manager">Responsable</label>
+                    <input type="text" class="form-control" th:field="*{manager}" id="manager" name="manager" placeholder="Responsable del proyecto" required="required">
+                  </div> 
+                </div> 
+                <div class="col-md-3"> 
+                  <div class="form-group">
+                    <label for="time">duracion</label>
+                    <input type="text" class="form-control" th:field="*{time}" id="time" name="time" placeholder="Duración del proyecto (horas)" required="required">
+                  </div> 
+                </div>     
+              </div> 
+              
+              <div class="row">
+              	<div class="col-md-3"> 
+                  <div class="form-group">
+                    <label for="start">Fecha de inicio</label>
+                    <input type="text" class="form-control" th:field="*{start}" name="start" id="start" placeholder="Fecha de inicio" required="required">
+                  </div>  
+              </div>
+              <div class="col-md-3"> 
+                 <div class="form-group">
+                   <label for="end">Fecha de finalizacion</label>
+                   <input type="text" class="form-control"  th:field="*{end}" name="end" id="end" placeholder="Fecha de finalización" required="required">
+                 </div>  
+             </div>
+              
+              </div>        
+                   
+              <div class="row">
+              
+                <div class="col-md-3"> 
+                  <div class="form-group">                  	
+                    <label for="user">Usuario quien creo el proyecto</label>
+                    <select class="form-control" name="user" id="user" >                                     
+                      <option th:value="${user.id}" th:text="${user.name}" selected>user session</option>
+                      <option  th:each="user: ${users}" th:value="${user.id}"                       
+                      th:text="${user.name}"  >nombre</option>                    
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-3"> 
+                  <div class="form-group">
+                    <label for="state">Estado</label>
+                    <select class="form-control" name="state"  id="state">
+					  <option value="Creado">Creado</option>
+                      <option value="En proceso">En proceso</option>
+                      <option value="Cancelado">Cancelado</option>
+                      <option value="Finalizado">Finalizado</option>
+                      <option value="Suspendido">Suspendido</option>	
+                    </select>
+                  </div>
+                </div>               
+                
+              </div>    
+              
+              <hr>
+              <div class="row">             
+              </div>                           
+              <button type="submit" class="btn btn-primary">Guardar</button>  
+            </form>
+          </div>
+        </div>
+      </div> <!-- /container -->
+
+    </main>
+
+    <footer th:insert="fragments/footer.html :: pie-pagina" class="footer">
+      
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>    
+    
+    <script>
+      
+      $(function () {         
+          $("#start").datepicker({dateFormat: 'dd-mm-yy'});
+          $("#end").datepicker({dateFormat: 'dd-mm-yy'});
+        }
+      );
+      
+      
+      
+      
+      
+      
+    </script>
+  </body>
+</html>

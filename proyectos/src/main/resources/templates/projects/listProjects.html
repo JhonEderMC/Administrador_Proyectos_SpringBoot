@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>ProyectosApp | Listado de de proyectos</title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/bootstrap/css/jumbotron.css}" rel="stylesheet">
+    <link th:href="@{bootstrap/css/sticky-footer-navbar.css}" rel="stylesheet">
+    
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+  </head>
+
+  <body>
+  
+    <header th:insert="fragments/menu.html :: menu-principal">
+          
+    </header>  
+    
+    
+    <div class="jumbotron">
+        <div class="container">
+          <h3>Listado de proyectos.</h3>
+          Puedes buscar por nombre, usuario y estado.
+          <form class="form-inline" th:action="@{/projects/search}" method="get" th:object="${projectSearch}">          	
+            <input type="text" class="form-control mb-3" th:field="*{name}" placeholder="Escriba un nombre de proyecto">&nbsp;
+            
+            <select  class="custom-select custom-select mb-3" th:field="*{user}">
+              <option th:value="${null}" selected>Seleccione un usuario</option>
+              <option th:each="user : ${users}"
+              		  th:value="${user.id}"
+              		  th:text="${user.name}"></option>
+              
+            </select>          
+            <div class="form-group">         
+               <select class="custom-select custom-select mb-3" name="state"  id="state">
+	                <option th:value="${null}" selected>Seleccione un estado</option>
+	                <option value="Creado">Creado</option>
+	                 <option value="En proceso">En proceso</option>
+	                 <option value="Cancelado">Cancelado</option>
+	                 <option value="Finalizado">Finalizado</option>
+	                 <option value="Suspendido">Suspendido</option>	
+               </select>        	
+                                   
+<!--                <input type="text" class="form-control mb-3" th:field="*{start}" name="start" id="start" placeholder="Fecha de inicio">                  -->
+                   
+<!--                <input type="text" class="form-control mb-3"  th:field="*{end}" name="end" id="end" placeholder="Fecha de finalización"> -->
+                   
+             </div>&nbsp; 
+            
+            <button type="submit" class="btn btn-primary mb-3">Buscar</button>
+          </form>
+        </div>
+      </div>    
+      
+      
+    
+
+    <main role="main">     
+      <hr>
+      <div class="container"> 
+
+        <div class="card">
+          <h4 class="card-header"><strong>Listado de proyectos</strong></h4>              
+          <div class="card-body">
+            <a class="btn btn-primary" th:href="@{/projects/create}" title="Crear nueva Oferta de Trabajo" role="button"><i class="fas fa-file" aria-hidden="true"></i> Nuevo</a>            
+            <hr>          
+          	<h5 th:if="${msg != null}"  th:text=${msg} class= "alert alert-success" role="alert"></h5>          
+            <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Area</th>                  
+                  <th scope="col">Presupuesto </th>
+                  <th scope="col">Responsable</th>
+                  <th scope="col">Duracion</th>
+                  <th scope="col">Fecha Crea.</th>
+                  <th scope="col">Fecha Ini.</th>
+                  <th scope="col">Fecha Fina.</th>
+                  <th scope="col">Usu. Creo. Proyt.</th>                   
+                  <th scope="col">Estado</th>
+                  <th scope="col">Operaciones</th>
+                </tr>
+              </thead>
+   
+              <tbody>
+                <tr th:each="project: ${projects}">
+               	 
+               	  <td th:text=${project.id}>id</td>
+               	  <td th:text=${project.name}>nombre</td>                 
+                  <td th:text="${project.area}">area</td>                  
+                  <td th:text="${'$ ' + project.budget}">presupuesto</td>
+                  <td th:text="${project.manager}">responsable</td>
+                  <td th:text="${project.time} +' h'">duracion</td>
+                  <td th:text="${#dates.format(project.create, 'dd-MMM-yyyy') }">creado</td>
+                  <td th:text="${#dates.format(project.start, 'dd-MMM-yyyy') }">inicio</td>
+                  <td th:text="${#dates.format(project.end, 'dd-MMM-yyyy') }">finaliza</td>
+                  <td th:text="${project.user.name}">Usuario creo proyect</td>                  
+                  <td th:text="${project.state}">estado</td>
+                  
+<!--                   <td th:text="${project.destacado == 1 ?  'Si' : 'No'}">destacado</td> -->
+                  <td>
+                    <a th:href="@{/projects/edit/{id} (id=${project.id})}" class="btn btn-success btn-sm" role="button" title="Editar el registro."><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                    <a th:href="@{/projects/delete/{id} (id=${project.id})}" onclick="return confirm('¿Estas seguro?')" class="btn btn-success btn-sm" role="button" title="Eliminar el registro."><i class="fas fa-trash" aria-hidden="true"></i></a>
+                  </td>
+                </tr>                
+                               
+              </tbody>
+            </table>       
+          </div>
+        </div>
+      </div> <!-- /container -->
+
+    </main>
+
+    <footer th:insert="fragments/footer.html :: pie-pagina"  class="footer">
+      
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+   <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>  
+
+    <script>      
+      $(function () {         
+          $("#start").datepicker({dateFormat: 'dd-mm-yy'});
+          $("#end").datepicker({dateFormat: 'dd-mm-yy'});
+        }
+      );     
+      
+    </script>
+  </body>
+</html>
